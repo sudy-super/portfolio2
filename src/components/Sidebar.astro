@@ -1,0 +1,161 @@
+---
+const sections = [
+  { id: 'hero', name: '' },
+  { id: 'about', name: 'About' },
+  { id: 'products', name: 'Products' },
+  { id: 'career', name: 'Career' },
+  { id: 'skills', name: 'Skills' },
+  { id: 'intern', name: 'Intern' },
+  { id: 'blog', name: 'Blog' },
+  { id: 'contact', name: 'Contact' },
+];
+---
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-track">
+    {sections.map((section, index) => (
+      <button
+        class="sidebar-item"
+        data-index={index}
+        data-section={section.id}
+        aria-label={section.name || 'Hero'}
+      >
+        <span class="sidebar-line"></span>
+        <span class="sidebar-label">{section.name}</span>
+      </button>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .sidebar {
+    position: fixed;
+    left: var(--container-padding);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .sidebar.visible {
+    opacity: 1;
+  }
+
+  .sidebar.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+  }
+
+  .sidebar-line {
+    width: 20px;
+    height: 1px;
+    background: var(--color-muted);
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-item.active .sidebar-line {
+    width: 40px;
+    background: var(--color-text);
+  }
+
+  .sidebar-item:hover .sidebar-line {
+    width: 30px;
+    background: var(--color-text);
+  }
+
+  .sidebar-label {
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .sidebar-item.active .sidebar-label {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--color-text);
+  }
+
+  .sidebar-item:hover .sidebar-label {
+    opacity: 0.7;
+    transform: translateX(0);
+  }
+
+  /* Hide on mobile */
+  @media (max-width: 768px) {
+    .sidebar {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const initSidebar = () => {
+    const sidebar = document.getElementById('sidebar');
+    const items = document.querySelectorAll('.sidebar-item');
+
+    if (!sidebar) return;
+
+    // Show sidebar after loading
+    window.addEventListener('loadingComplete', () => {
+      sidebar.classList.add('visible');
+    });
+
+    // Update active state on section change
+    window.addEventListener('sectionChange', ((e: CustomEvent) => {
+      const { index } = e.detail;
+
+      items.forEach((item, i) => {
+        if (i === index) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      // Hide sidebar on hero and footer
+      if (index === 0) {
+        sidebar.classList.add('hidden');
+      } else {
+        sidebar.classList.remove('hidden');
+      }
+    }) as EventListener);
+
+    // Click to navigate
+    items.forEach((item) => {
+      item.addEventListener('click', () => {
+        const index = parseInt((item as HTMLElement).dataset.index || '0');
+        window.dispatchEvent(new CustomEvent('navigateTo', { detail: { index } }));
+      });
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSidebar);
+  } else {
+    initSidebar();
+  }
+</script>

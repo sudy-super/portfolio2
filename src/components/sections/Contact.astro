@@ -1,0 +1,107 @@
+---
+---
+
+<section class="section contact-section" id="contact" data-section="contact">
+  <div class="section-content">
+    <div class="contact-card parallax-layer" data-depth="0.05">
+      <div class="contact-card-header">
+        <div class="contact-label">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M22 6L12 13L2 6"/>
+          </svg>
+          <span class="label-text">EMAIL</span>
+        </div>
+      </div>
+
+      <div class="contact-content">
+        <span class="email-address">hello<span class="at">@</span>sudy.me</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border-radius: 20px;
+    padding: clamp(1.5rem, 4vw, 2rem);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    max-width: 400px;
+  }
+
+  .contact-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0 var(--color-text);
+  }
+
+  .contact-card-header {
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+  }
+
+  .contact-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-muted);
+  }
+
+  .contact-label svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .label-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .contact-content {
+    margin-bottom: var(--space-lg);
+  }
+
+  .email-address {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    transition: color var(--transition-fast);
+  }
+
+  .at {
+    color: #FF6B6B;
+    transition: color var(--transition-fast);
+  }
+
+  .contact-card:hover .email-address {
+    color: #FF6B6B;
+  }
+
+  .contact-card:hover .at {
+    color: var(--color-text);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .email-address {
+      font-size: 1.125rem;
+    }
+
+    .contact-card {
+      width: 100%;
+    }
+  }
+</style>

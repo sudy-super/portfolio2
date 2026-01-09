@@ -1,0 +1,332 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CustomCursor from '../components/CustomCursor.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import Footer from '../components/Footer.astro';
+
+const products = [
+  {
+    name: 'Malum-230',
+    date: '2025-01-06',
+    description: '手作業で作成した高品質な事前学習・事後学習両用の論理推論データセット。oasst2という一般的な対話データセットを用いた実験において、大規模言語モデル「Qwen2.5-7B」に対しMalumの追加の有無で比較学習を行い、論理的推論 (Reasoning)タスクの性能向上を実証。',
+    links: [
+      { label: 'Huggingface', url: 'https://huggingface.co/datasets/Manual-Dataset-Creation-Project/Malum-230', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'Piece-of-Refined-OSCAR',
+    date: '2024-04-07',
+    description: 'LLMの事前学習のテスト向けに160万件 (0.5b tokens)程度の小規模な日本語コーパスを構築。',
+    links: [
+      { label: 'Huggingface', url: 'https://huggingface.co/datasets/sudy-super/piece-of-refined-oscar', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'Pret-a-Porter',
+    date: '2024-04-01',
+    description: '日本語Instruction-tuning/RLHFデータセット生成を目的として、既存データセットの高品質化および指示生成モデルと応答生成モデルの作成を行ったプロジェクト。LOCAL AI HACKATHON #000にて銅賞を受賞。既存データセットの高品質化と一部の学習コードの実装を担当。',
+    links: [
+      { label: 'Notion', url: 'https://imminent-land-e64.notion.site/e569abd90c3f4f0586fa03e9d080193d?p=0d59f729b7444fa88b6ab1c5d232ea6e&pm=s', icon: '/link.svg' },
+      { label: 'Huggingface', url: 'https://huggingface.co/datasets/sudy-super/oasst2-chat-5k-ja', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'JetCopper-10B',
+    date: '2024-03-22',
+    description: 'LLMの事前学習のテスト用に1600万件 (10b tokens)程度の小規模な日本語・英語・コード混合のコーパスを構築。',
+    links: [
+      { label: 'Huggingface', url: 'https://huggingface.co/datasets/sudy-super/JetCopper-10B', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'MoEモデルの事前学習に最適化した学習フレームワーク',
+    date: '2024',
+    description: 'NDAにより非公開。',
+    links: []
+  },
+  {
+    name: 'Baku',
+    date: '2024-01-09',
+    description: '大規模言語モデル「CALM2-7b」の同じ層を再利用することによりパラメータを増やしたモデル。1~24層、8~32層をslerpマージしたbaku-10b、1~16層x1、8~24層x2、16~32層x1をpassthroughマージしたbaku-13b、同構成でslerpマージしたbaku-13b-v2を作成。',
+    links: [
+      { label: 'Huggingface', url: 'https://huggingface.co/sudy-super/baku-10b', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'Sentinel',
+    date: '2023-11-15',
+    description: '多言語対応のプロンプトインジェクション判定器。原理的にハックされることがないため、対話モデルの前段に配置することで既存LLMのプロンプトを操作する事に比べて効果的にプロンプトインジェクションやジェイルブレイクを防止可能。Meta社のLlama Guardの45倍小規模なため低レイテンシで動作する。',
+    links: [
+      { label: 'Huggingface', url: 'https://huggingface.co/sudy-super/Sentinel', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'AutoMATA',
+    date: '2023-09-06',
+    description: 'LLMに能動的推論機能と疑似意識を実装するツール。人間に近い思考を再現することで素のLLMより高い問題解決・対話能力を発揮可能。',
+    links: [
+      { label: 'GitHub', url: 'https://github.com/sudy-super/AutoMATA', icon: '/github.svg' }
+    ]
+  },
+  {
+    name: 'CoTangent',
+    date: '2023-07-04',
+    description: '手作業で作成した高品質な100件の日本語CoTデータセット。',
+    links: [
+      { label: 'Huggingface', url: 'https://huggingface.co/datasets/sudy-super/CoTangent', icon: '/huggingface.svg' }
+    ]
+  },
+  {
+    name: 'SudyIndex',
+    date: '2023-06-14',
+    description: 'AITuber等のAIキャラクターに特化した記憶・想起システム。',
+    links: [
+      { label: 'GitHub', url: 'https://github.com/sudy-super/SudyIndex', icon: '/github.svg' }
+    ]
+  },
+];
+---
+
+<Layout title="Products - sudy" description="sudy's projects and products">
+  <CustomCursor />
+
+  <header class="page-header">
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span>Back</span>
+    </a>
+    <a href="/" class="header-logo">
+      <img src="/sudy_logo.svg" alt="sudy" width="32" height="32" />
+    </a>
+  </header>
+
+  <main class="products-page">
+    <div class="products-header">
+      <SectionTitle title="Products" />
+      <p class="products-subtitle">Projects and contributions</p>
+    </div>
+
+    <div class="products-grid">
+      {products.map((product, index) => (
+        <article class="product-card" style={`--delay: ${index * 0.05}s`}>
+          <div class="product-header">
+            <span class="product-date">{product.date}</span>
+            <h2 class="product-name">{product.name}</h2>
+          </div>
+          <p class="product-description">{product.description}</p>
+          {product.links.length > 0 && (
+            <div class="product-links">
+              {product.links.map((link) => (
+                <a href={link.url} target="_blank" rel="noopener noreferrer" class="product-link">
+                  <img src={link.icon} alt="" width="16" height="16" />
+                  <span>{link.label}</span>
+                  <span class="link-arrow">↗</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg);
+    z-index: 100;
+  }
+
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  .back-link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header-logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .products-page {
+    min-height: 100vh;
+    padding: calc(var(--header-height) + var(--space-xl)) var(--space-lg) var(--space-xl);
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .products-header {
+    margin-bottom: var(--space-xl);
+  }
+
+  .products-subtitle {
+    font-size: 1rem;
+    color: var(--color-muted);
+    margin-top: var(--space-sm);
+  }
+
+  .products-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .product-card {
+    padding: var(--space-lg);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: var(--delay);
+  }
+
+  .product-card:hover {
+    border-color: var(--color-text);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .product-header {
+    margin-bottom: var(--space-md);
+  }
+
+  .product-date {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+  }
+
+  .product-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-top: var(--space-xs);
+  }
+
+  .product-description {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+  }
+
+  .product-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .product-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+  }
+
+  .product-link:hover {
+    background: var(--color-text);
+    color: var(--color-white);
+    border-color: var(--color-text);
+  }
+
+  .product-link:hover img {
+    filter: invert(1);
+  }
+
+  .product-link img {
+    width: 14px;
+    height: 14px;
+    transition: filter var(--transition-fast);
+  }
+
+  .link-arrow {
+    font-size: 0.625rem;
+    margin-left: var(--space-xs);
+  }
+
+  @media (max-width: 768px) {
+    .products-page {
+      padding: calc(var(--header-height) + var(--space-lg)) var(--space-md) var(--space-lg);
+    }
+
+    .product-name {
+      font-size: 1.25rem;
+    }
+
+    .product-description {
+      font-size: 0.875rem;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  // Animate title on load
+  const title = document.querySelector('.section-title');
+  const textEl = title?.querySelector('.title-text') as HTMLElement;
+  const cursorEl = title?.querySelector('.title-cursor') as HTMLElement;
+
+  if (textEl) {
+    const text = 'Products';
+    cursorEl?.classList.remove('hidden');
+    textEl.textContent = '';
+
+    let charIndex = 0;
+    const typeChar = () => {
+      if (charIndex < text.length) {
+        textEl.textContent += text[charIndex];
+        charIndex++;
+        setTimeout(typeChar, 50);
+      } else {
+        setTimeout(() => {
+          cursorEl?.classList.add('hidden');
+        }, 500);
+      }
+    };
+
+    setTimeout(typeChar, 300);
+  }
+</script>

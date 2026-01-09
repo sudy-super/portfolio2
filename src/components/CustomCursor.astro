@@ -1,0 +1,191 @@
+---
+---
+
+<div class="cursor-wrapper">
+  <div class="cursor cursor-outer"></div>
+  <div class="cursor cursor-inner"></div>
+</div>
+
+<style>
+  .cursor-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    pointer-events: none;
+  }
+
+  .cursor {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease;
+  }
+
+  .cursor-outer {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-text);
+    background: transparent;
+    mix-blend-mode: difference;
+  }
+
+  .cursor-inner {
+    width: 8px;
+    height: 8px;
+    background: var(--color-text);
+    mix-blend-mode: difference;
+  }
+
+  /* Hover states */
+  .cursor-wrapper.hovering .cursor-outer {
+    width: 60px;
+    height: 60px;
+    border-color: var(--color-accent);
+  }
+
+  .cursor-wrapper.hovering .cursor-inner {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* Link hover */
+  .cursor-wrapper.link-hover .cursor-outer {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.1);
+    border-color: transparent;
+  }
+
+  .cursor-wrapper.link-hover .cursor-inner {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Hidden during loading */
+  .cursor-wrapper.hidden {
+    opacity: 0;
+  }
+
+  /* Hide on touch devices */
+  @media (pointer: coarse) {
+    .cursor-wrapper {
+      display: none;
+    }
+  }
+
+  /* Hide on mobile */
+  @media (max-width: 768px) {
+    .cursor-wrapper {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+
+  const initCursor = () => {
+    const wrapper = document.querySelector('.cursor-wrapper');
+    const outer = document.querySelector('.cursor-outer');
+    const inner = document.querySelector('.cursor-inner');
+
+    if (!wrapper || !outer || !inner) return;
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let outerX = mouseX;
+    let outerY = mouseY;
+    let innerX = mouseX;
+    let innerY = mouseY;
+
+    // Hide cursor initially during loading
+    wrapper.classList.add('hidden');
+
+    // Show cursor after loading
+    window.addEventListener('loadingComplete', () => {
+      wrapper.classList.remove('hidden');
+    });
+
+    // Track mouse position
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    // Animate cursor with lerp
+    const animate = () => {
+      // Inner cursor - fast follow
+      innerX += (mouseX - innerX) * 0.2;
+      innerY += (mouseY - innerY) * 0.2;
+      gsap.set(inner, { x: innerX, y: innerY });
+
+      // Outer cursor - slow follow
+      outerX += (mouseX - outerX) * 0.1;
+      outerY += (mouseY - outerY) * 0.1;
+      gsap.set(outer, { x: outerX, y: outerY });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    // Hover effects
+    const addHoverEffect = () => {
+      const links = document.querySelectorAll('a, button, [role="button"], .hoverable');
+      const interactives = document.querySelectorAll('input, textarea, select');
+
+      links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          wrapper.classList.add('link-hover');
+        });
+        link.addEventListener('mouseleave', () => {
+          wrapper.classList.remove('link-hover');
+        });
+      });
+
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          wrapper.classList.add('hovering');
+        });
+        el.addEventListener('mouseleave', () => {
+          wrapper.classList.remove('hovering');
+        });
+      });
+    };
+
+    addHoverEffect();
+
+    // Re-add hover effects when content changes
+    const observer = new MutationObserver(() => {
+      addHoverEffect();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    // Hide cursor when leaving window
+    document.addEventListener('mouseleave', () => {
+      gsap.to([outer, inner], {
+        opacity: 0,
+        duration: 0.2
+      });
+    });
+
+    document.addEventListener('mouseenter', () => {
+      gsap.to([outer, inner], {
+        opacity: 1,
+        duration: 0.2
+      });
+    });
+  };
+
+  // Initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCursor);
+  } else {
+    initCursor();
+  }
+</script>
