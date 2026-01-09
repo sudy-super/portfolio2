@@ -1,0 +1,317 @@
+---
+---
+
+<section class="section about-section" id="about" data-section="about">
+  <!-- Background marquee text decoration like ALCHE "WORKS" style - diagonal -->
+  <div class="bg-text-decoration" aria-hidden="true">
+    <div class="marquee-wrapper">
+      <!-- Row 1 - moves left -->
+      <div class="marquee-row marquee-left">
+        <div class="marquee-track">
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+        </div>
+      </div>
+      <!-- Row 2 - moves right -->
+      <div class="marquee-row marquee-right">
+        <div class="marquee-track">
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">NLP</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Speed-up Runtime</span>
+          <span class="bg-text separator">/</span>
+          <span class="bg-text">Reduce Memory Footprint</span>
+          <span class="bg-text separator">/</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid overlay -->
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <!-- Main content -->
+  <div class="about-content">
+    <div class="about-card parallax-layer" data-depth="0.05">
+      <h2 class="about-name">須田 楽大</h2>
+
+      <div class="about-meta">
+        <div class="meta-item">
+          <span class="meta-label">Age</span>
+          <span class="meta-value">18</span>
+        </div>
+        <span class="meta-divider"></span>
+        <div class="meta-item">
+          <span class="meta-label">University</span>
+          <span class="meta-value">筑波大学 情報科学類</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+    background: var(--color-bg);
+  }
+
+  /* Background marquee text decoration - ALCHE "WORKS" style - diagonal */
+  .bg-text-decoration {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .marquee-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 200%;
+    transform: rotate(-12deg);
+  }
+
+  .marquee-row {
+    display: flex;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+    padding-right: 1.5rem;
+    animation: marquee-scroll 40s linear infinite;
+  }
+
+  .marquee-left .marquee-track {
+    animation-name: marquee-scroll-left;
+  }
+
+  .marquee-right .marquee-track {
+    animation-name: marquee-scroll-right;
+  }
+
+  @keyframes marquee-scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee-scroll-right {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .bg-text {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(128, 128, 128, 0.25);
+    background: linear-gradient(
+      180deg,
+      rgba(128, 128, 128, 0.12) 0%,
+      rgba(128, 128, 128, 0.04) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    white-space: nowrap;
+    user-select: none;
+    line-height: 1;
+  }
+
+  .bg-text.separator {
+    opacity: 0.5;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation-play-state: paused;
+    }
+  }
+
+  /* Grid overlay like ALCHE */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: 
+      linear-gradient(rgba(128, 128, 128, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 70%);
+  }
+
+  /* Main content */
+  .about-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 var(--container-padding);
+  }
+
+  .about-card {
+    opacity: 0;
+    transform: translateY(30px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-name {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text);
+  }
+
+  .about-name-en {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 2rem 0;
+  }
+
+  .about-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .meta-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-muted);
+  }
+
+  .meta-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .meta-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--color-border);
+    flex-shrink: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .about-content {
+      padding: 0 var(--container-padding);
+    }
+
+    .bg-text {
+      font-size: clamp(1.5rem, 6vw, 3rem);
+      -webkit-text-stroke: 1px rgba(128, 128, 128, 0.15);
+    }
+
+    .marquee-wrapper {
+      transform: rotate(-8deg);
+    }
+
+    .marquee-track {
+      animation-duration: 25s;
+      gap: 1rem;
+      padding-right: 1rem;
+    }
+
+    .grid-overlay {
+      background-size: 40px 40px;
+    }
+
+    .about-meta {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .meta-divider {
+      width: 32px;
+      height: 1px;
+    }
+  }
+</style>

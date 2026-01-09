@@ -1,0 +1,167 @@
+---
+// Fetch OGP data from URL
+async function fetchOgData(url: string): Promise<{ image: string | null; date: string | null }> {
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+
+    // Extract og:image
+    const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i)
+      || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+
+    // Extract article:published_time or other date meta
+    const dateMatch = html.match(/<meta[^>]*property=["']article:published_time["'][^>]*content=["']([^"']+)["']/i)
+      || html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']article:published_time["']/i)
+      || html.match(/<time[^>]*datetime=["']([^"']+)["']/i);
+
+    return {
+      image: ogImageMatch ? ogImageMatch[1] : null,
+      date: dateMatch ? dateMatch[1] : null
+    };
+  } catch (error) {
+    console.error(`Failed to fetch OGP for ${url}:`, error);
+    return { image: null, date: null };
+  }
+}
+
+// Format date to yyyy/mm/dd
+function formatDate(dateStr: string | null): string {
+  if (!dateStr) return '';
+  try {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+  } catch {
+    return '';
+  }
+}
+
+const blogData = [
+  {
+    title: '【出願RTA】社不が筑波大学情報科学類のAC入試を受験するとどうなるのか？(合格体験記)',
+    url: 'https://note.com/sudy_super/n/nfdef95c9c403'
+  },
+  {
+    title: '【Morphological Inflection】国際人工知能オリンピックのサンプル問題を解いてみた！',
+    url: 'https://zenn.dev/sudy_super/articles/8bb74682009ff0'
+  }
+];
+
+// Fetch OGP data for all blogs
+const blogs = await Promise.all(
+  blogData.map(async (blog) => {
+    const ogData = await fetchOgData(blog.url);
+    return {
+      ...blog,
+      thumbnail: ogData.image,
+      date: formatDate(ogData.date)
+    };
+  })
+);
+---
+
+<section class="section blog-section" id="blog" data-section="blog">
+  <div class="section-content">
+    <div class="posts-list">
+      {blogs.map((blog, index) => (
+        <a href={blog.url} target="_blank" rel="noopener noreferrer" class="blog-card parallax-layer" data-depth={(index + 1) * 0.02}>
+          {blog.thumbnail && (
+            <div class="blog-thumbnail">
+              <img src={blog.thumbnail} alt={blog.title} loading="lazy" />
+            </div>
+          )}
+
+          <div class="blog-card-content">
+            <h3 class="blog-title">{blog.title}</h3>
+            {blog.date && <span class="blog-date">{blog.date}</span>}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .blog-section {
+    display: flex;
+    align-items: center;
+  }
+
+  .posts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .blog-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0 var(--color-text);
+  }
+
+  .blog-thumbnail {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .blog-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+  }
+
+  .blog-card:hover .blog-thumbnail img {
+    transform: scale(1.05);
+  }
+
+  .blog-card-content {
+    padding: clamp(1rem, 3vw, 1.25rem);
+  }
+
+  .blog-date {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-top: var(--space-xs);
+  }
+
+  .blog-title {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--color-text);
+    margin: 0;
+    transition: color var(--transition-fast);
+  }
+
+  .blog-card:hover .blog-title {
+    color: #FF6B6B;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .posts-list {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-title {
+      font-size: 1rem;
+    }
+  }
+</style>

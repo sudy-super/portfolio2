@@ -1,0 +1,246 @@
+---
+---
+
+<div id="loadingScreen" class="loading-screen">
+  <div class="loading-content">
+    <div class="glitch-wrapper">
+      <div class="glitch-logo" data-text="sudy">
+        <img src="/sudy_logo.svg" alt="sudy" class="logo-main" />
+        <img src="/sudy_logo.svg" alt="" class="logo-glitch logo-r" aria-hidden="true" />
+        <img src="/sudy_logo.svg" alt="" class="logo-glitch logo-b" aria-hidden="true" />
+      </div>
+    </div>
+    <div class="loading-text">
+      <span class="loading-char">L</span>
+      <span class="loading-char">o</span>
+      <span class="loading-char">a</span>
+      <span class="loading-char">d</span>
+      <span class="loading-char">i</span>
+      <span class="loading-char">n</span>
+      <span class="loading-char">g</span>
+      <span class="loading-dots">...</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+
+  .loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .glitch-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+
+  .glitch-logo {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .logo-main,
+  .logo-glitch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .logo-main {
+    z-index: 2;
+  }
+
+  .logo-glitch {
+    z-index: 1;
+    opacity: 0;
+  }
+
+  .logo-r {
+    filter: url(#redChannel);
+  }
+
+  .logo-b {
+    filter: url(#blueChannel);
+  }
+
+  /* Glitch animation states */
+  .glitch-logo.glitching .logo-glitch {
+    opacity: 0.8;
+  }
+
+  .glitch-logo.glitching .logo-r {
+    animation: glitch-r 0.1s steps(2) infinite;
+  }
+
+  .glitch-logo.glitching .logo-b {
+    animation: glitch-b 0.1s steps(2) infinite;
+  }
+
+  .glitch-logo.glitching .logo-main {
+    animation: glitch-main 0.1s steps(2) infinite;
+  }
+
+  @keyframes glitch-r {
+    0% { transform: translate(-3px, 0); }
+    25% { transform: translate(3px, -2px); }
+    50% { transform: translate(-2px, 2px); }
+    75% { transform: translate(2px, -1px); }
+    100% { transform: translate(-3px, 1px); }
+  }
+
+  @keyframes glitch-b {
+    0% { transform: translate(3px, 0); }
+    25% { transform: translate(-3px, 2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, 1px); }
+    100% { transform: translate(3px, -1px); }
+  }
+
+  @keyframes glitch-main {
+    0% { transform: translate(0); clip-path: inset(0 0 80% 0); }
+    20% { transform: translate(-2px, 2px); clip-path: inset(20% 0 60% 0); }
+    40% { transform: translate(2px, -2px); clip-path: inset(40% 0 40% 0); }
+    60% { transform: translate(-1px, 1px); clip-path: inset(60% 0 20% 0); }
+    80% { transform: translate(1px, -1px); clip-path: inset(80% 0 0 0); }
+    100% { transform: translate(0); clip-path: inset(0); }
+  }
+
+  .loading-text {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    display: flex;
+    gap: 0.1em;
+  }
+
+  .loading-char {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .loading-dots {
+    opacity: 0;
+  }
+</style>
+
+<!-- SVG Filters for RGB split -->
+<svg style="position: absolute; width: 0; height: 0;">
+  <defs>
+    <filter id="redChannel">
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+    </filter>
+    <filter id="blueChannel">
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" />
+    </filter>
+  </defs>
+</svg>
+
+<script>
+  import gsap from 'gsap';
+
+  const initLoading = () => {
+    const loadingScreen = document.getElementById('loadingScreen');
+    const glitchLogo = document.querySelector('.glitch-logo');
+    const chars = document.querySelectorAll('.loading-char');
+    const dots = document.querySelector('.loading-dots');
+
+    if (!loadingScreen || !glitchLogo) return;
+
+    const tl = gsap.timeline();
+
+    // Animate loading text characters
+    tl.to(chars, {
+      opacity: 1,
+      y: 0,
+      duration: 0.3,
+      stagger: 0.05,
+      ease: 'power2.out'
+    })
+    .to(dots, {
+      opacity: 1,
+      duration: 0.2
+    }, '-=0.1');
+
+    // Glitch effect loop
+    let glitchInterval: ReturnType<typeof setInterval>;
+
+    const startGlitch = () => {
+      glitchLogo.classList.add('glitching');
+      setTimeout(() => {
+        glitchLogo.classList.remove('glitching');
+      }, 200);
+    };
+
+    // Random glitch bursts
+    glitchInterval = setInterval(() => {
+      if (Math.random() > 0.5) {
+        startGlitch();
+      }
+    }, 300);
+
+    // Initial strong glitch
+    setTimeout(startGlitch, 100);
+    setTimeout(startGlitch, 400);
+    setTimeout(startGlitch, 800);
+
+    // Hide loading screen after delay
+    setTimeout(() => {
+      clearInterval(glitchInterval);
+
+      // Final glitch burst before hiding
+      gsap.to(glitchLogo, {
+        scale: 1.1,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 3,
+        ease: 'steps(1)',
+        onComplete: () => {
+          gsap.to(loadingScreen, {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.inOut',
+            onComplete: () => {
+              loadingScreen.classList.add('hidden');
+              // Dispatch event for other components
+              window.dispatchEvent(new CustomEvent('loadingComplete'));
+            }
+          });
+        }
+      });
+    }, 2500);
+  };
+
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLoading);
+  } else {
+    initLoading();
+  }
+</script>
