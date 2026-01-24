@@ -41,7 +41,7 @@ export function HoveredWorkPanel({ work, visible }: HoveredWorkPanelProps) {
         bottom: '2rem',
         left: '2rem',
         right: '2rem',
-        color: '#ffffff',
+        color: '#1a1a1a',
         pointerEvents: 'none',
         display: 'flex',
         justifyContent: 'space-between',
@@ -62,7 +62,7 @@ export function HoveredWorkPanel({ work, visible }: HoveredWorkPanelProps) {
           <span
             style={{
               fontSize: '0.75rem',
-              color: '#888888',
+              color: '#666666',
               fontWeight: 500,
             }}
           >
@@ -74,15 +74,15 @@ export function HoveredWorkPanel({ work, visible }: HoveredWorkPanelProps) {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: '#888888',
+                color: '#666666',
                 pointerEvents: 'auto',
                 transition: 'color 0.2s',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#ffffff';
+                e.currentTarget.style.color = '#1a1a1a';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#888888';
+                e.currentTarget.style.color = '#666666';
               }}
             >
               {getLinkIcon(work.linkType)}
@@ -105,7 +105,7 @@ export function HoveredWorkPanel({ work, visible }: HoveredWorkPanelProps) {
         <p
           style={{
             fontSize: 'clamp(0.875rem, 1.5vw, 1rem)',
-            color: '#aaaaaa',
+            color: '#666666',
             marginTop: '0.75rem',
             lineHeight: 1.6,
           }}
@@ -118,7 +118,7 @@ export function HoveredWorkPanel({ work, visible }: HoveredWorkPanelProps) {
       <div
         style={{
           fontSize: '0.75rem',
-          color: '#666666',
+          color: '#888888',
           textAlign: 'right',
           flexShrink: 0,
         }}
