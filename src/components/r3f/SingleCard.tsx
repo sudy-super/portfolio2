@@ -77,10 +77,10 @@ export function SingleCard({
         setPointer(false);
       }}
     >
-      {/* カード背景（サムネイルがない場合） */}
+      {/* カード背景 */}
       <CurvedImage
         url={work.thumbnailUrl}
-        color="#1a1a1a"
+        color="#ffffff"
         curveAmount={0.3}
         scale={[scaleX, scaleY, 1]}
       />
@@ -90,7 +90,7 @@ export function SingleCard({
         <Text
           position={[0, 0.15, 0.1]}
           fontSize={0.12}
-          color="#ffffff"
+          color="#1a1a1a"
           anchorX="center"
           anchorY="middle"
           maxWidth={scaleX * 0.8}
@@ -104,7 +104,7 @@ export function SingleCard({
         <Text
           position={[0, -0.25, 0.1]}
           fontSize={0.08}
-          color="#888888"
+          color="#666666"
           anchorX="center"
           anchorY="middle"
         >

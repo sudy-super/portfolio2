@@ -2,6 +2,7 @@ import { useRef, useCallback, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { ScrollControls, useScroll } from '@react-three/drei';
 import { Experience } from './Experience';
+import { CylinderGrid } from './CylinderGrid';
 import { HoveredWorkPanel } from '../ui/HoveredWorkPanel';
 import type { Work } from '../../data/works';
 
@@ -52,16 +53,27 @@ export function Scene({ works }: SceneProps) {
         position: 'relative',
         width: '100%',
         height: '100%',
+        fontFamily: "'Space Grotesk', 'Noto Sans JP', system-ui, sans-serif",
       }}
     >
       <Canvas dpr={[1, 1.5]} style={{ display: 'block', width: '100%', height: '100%' }}>
-        <color attach="background" args={['#1a1a1a']} />
-        <fog attach="fog" args={['#1a1a1a', 1, 3]} />
+        <color attach="background" args={['#f5f5f5']} />
+        <fog attach="fog" args={['#f5f5f5', 8, 20]} />
+
+        {/* 固定の円筒グリッド（奥側に配置） */}
+        <CylinderGrid
+          radius={8}
+          height={30}
+          radialSegments={48}
+          heightSegments={40}
+          color="#000000"
+          opacity={0.12}
+        />
 
         <ScrollControls pages={8} damping={0.5}>
           <ScrollTopObserver onChange={setAtTop} />
-          <ambientLight color={'#ededed'} intensity={2} />
-          <directionalLight color={'#ededed'} position={[2, 5, 5]} intensity={Math.PI * 1.5} />
+          <ambientLight color={'#ffffff'} intensity={2} />
+          <directionalLight color={'#ffffff'} position={[2, 5, 5]} intensity={Math.PI * 1.5} />
           <Experience
             works={works}
             onHoverChange={handleHoverChange}
@@ -82,24 +94,25 @@ export function Scene({ works }: SceneProps) {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             textAlign: 'center',
-            color: '#ffffff',
+            color: '#1a1a1a',
             pointerEvents: 'none',
           }}
         >
           <h1
             style={{
-              fontSize: 'clamp(2rem, 8vw, 5rem)',
+              fontSize: 'clamp(3rem, 12vw, 8rem)',
               fontWeight: 600,
               letterSpacing: '-0.02em',
               margin: 0,
             }}
           >
+            <span style={{ color: 'transparent', WebkitTextStroke: '2px #1a1a1a' }}>#</span>
             Products
           </h1>
           <p
             style={{
               fontSize: 'clamp(0.875rem, 2vw, 1.125rem)',
-              color: '#888888',
+              color: '#666666',
               marginTop: '1rem',
             }}
           >
@@ -115,21 +128,21 @@ export function Scene({ works }: SceneProps) {
           position: 'absolute',
           top: '2rem',
           left: '2rem',
-          color: '#ffffff',
+          color: '#1a1a1a',
           fontSize: '0.875rem',
           fontWeight: 500,
           display: 'flex',
           alignItems: 'center',
           gap: '0.5rem',
           textDecoration: 'none',
-          opacity: 0.8,
+          opacity: 0.6,
           transition: 'opacity 0.2s',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.opacity = '1';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.opacity = '0.8';
+          e.currentTarget.style.opacity = '0.6';
         }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
