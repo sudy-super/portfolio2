@@ -8,3 +8,9 @@ node_modules/
 ref/
 # Spiral backup (for future reuse)
 src/components/r3f/_spiral-backup/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
