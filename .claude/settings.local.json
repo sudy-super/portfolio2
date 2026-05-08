@@ -4,7 +4,26 @@
       "Bash(npm install)",
       "Bash(npm run build:*)",
       "Bash(npm create:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "mcp__serena__list_memories",
+      "Bash(npx astro check:*)",
+      "Bash(npx tsc:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_run_code",
+      "mcp__chrome-devtools__list_pages",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__evaluate_script",
+      "Bash(lsof:*)",
+      "Bash(sips --version)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/rakuto/Documents/mysite/portfolio2/public/sudy_icon.png)",
+      "Bash(sips -s format png -z 256 256 sudy_icon.png --out /tmp/sudy_icon_256.png)",
+      "Bash(ffmpeg -y -i /tmp/sudy_icon_256.png -vf \"scale=256:256\" favicon.ico)",
+      "Bash(sips -s format png -z 64 64 sudy_icon.png --out /tmp/sudy_icon_64.png)",
+      "Bash(ffmpeg -y -i /tmp/sudy_icon_64.png favicon.ico)",
+      "Bash(python3 *)"
     ]
   },
   "enabledMcpjsonServers": [

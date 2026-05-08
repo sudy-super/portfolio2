@@ -1,23 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Loading from '../components/Loading.astro';
 import HashTitle from '../components/HashTitle.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
 
 import Hero from '../components/sections/Hero.astro';
 import About from '../components/sections/About.astro';
-import Products from '../components/sections/Products.astro';
 import Career from '../components/sections/Career.astro';
-import Skills from '../components/sections/Skills.astro';
-import Intern from '../components/sections/Intern.astro';
 import Blog from '../components/sections/Blog.astro';
+import Link from '../components/sections/Link.astro';
 import Contact from '../components/sections/Contact.astro';
 
 ---
 
 <Layout title="sudy - Portfolio">
-  <Loading />
   <HashTitle />
   <Sidebar />
 
@@ -25,11 +21,9 @@ import Contact from '../components/sections/Contact.astro';
     <div class="sections-wrapper" id="sectionsWrapper">
       <Hero />
       <About />
-      <Products />
       <Career />
-      <Skills />
-      <Intern />
       <Blog />
+      <Link />
       <Contact />
     </div>
     <Footer />
@@ -40,23 +34,12 @@ import Contact from '../components/sections/Contact.astro';
   .main-container {
     height: 100vh;
     overflow-y: auto;
-    scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
   }
 
   .sections-wrapper {
     display: flex;
     flex-direction: column;
-  }
-
-  .sections-wrapper :global(.section) {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-
-  /* Footer snap point */
-  .main-container :global(.footer) {
-    scroll-snap-align: start;
   }
 
   /* Hide scrollbar but keep functionality */
@@ -91,87 +74,101 @@ import Contact from '../components/sections/Contact.astro';
 
     let currentSection = -1; // Start at -1 to show "sudy" initially
     let isAnimating = false;
-    let lastScrollTime = 0;
     const scrollCooldown = 800;
 
     // Section titles data - matches section order (Hero shows sudy, then section names)
-    const sectionNames = ['sudy', 'About', 'Products', 'Career', 'Skills', 'Intern', 'Blog', 'Contact'];
+    const sectionNames = ['sudy', 'About', 'Career', 'Blog', 'Link', 'Contact'];
 
-    // Typewriter animation for HashTitle (left-top)
-    const typewriterAnimate = (text: string, callback?: () => void) => {
-      if (!titleText || !titleCursor) return;
+    // Title state: token cancels in-flight timeouts so concurrent typewriters can't mix characters
+    let titleSection = -2;
+    let titleAnimToken = 0;
+    let titleAnimTimeouts: ReturnType<typeof setTimeout>[] = [];
 
-      titleCursor.classList.remove('hidden');
-      titleText.textContent = '';
-
-      let charIndex = 0;
-      const typeChar = () => {
-        if (charIndex < text.length) {
-          titleText.textContent += text[charIndex];
-          charIndex++;
-          setTimeout(typeChar, 50);
-        } else {
-          setTimeout(() => {
-            titleCursor.classList.add('hidden');
-            callback?.();
-          }, 500);
-        }
-      };
-
-      typeChar();
+    const clearTitleAnim = () => {
+      titleAnimToken++;
+      titleAnimTimeouts.forEach(clearTimeout);
+      titleAnimTimeouts = [];
     };
 
-    // Typewriter animation for Hero (center)
-    const heroTypewriterAnimate = (text: string, callback?: () => void) => {
-      if (!heroTitleText || !heroTitleCursor) return;
-
-      heroTitleCursor.classList.remove('hidden');
-      heroTitleText.textContent = '';
-
-      let charIndex = 0;
-      const typeChar = () => {
-        if (charIndex < text.length) {
-          heroTitleText.textContent += text[charIndex];
-          charIndex++;
-          setTimeout(typeChar, 50);
-        } else {
-          setTimeout(() => {
-            heroTitleCursor.classList.add('hidden');
-            callback?.();
-          }, 500);
-        }
-      };
-
-      typeChar();
+    const scheduleAnim = (fn: () => void, ms: number, token: number) => {
+      const id = setTimeout(() => {
+        if (token !== titleAnimToken) return;
+        titleAnimTimeouts = titleAnimTimeouts.filter(t => t !== id);
+        fn();
+      }, ms);
+      titleAnimTimeouts.push(id);
     };
 
-    // Animate section content
+    const typewriter = (target: HTMLElement, cursor: HTMLElement, text: string, token: number) => {
+      if (token !== titleAnimToken) return;
+      cursor.classList.remove('hidden');
+      target.textContent = '';
+      let i = 0;
+      const step = () => {
+        if (token !== titleAnimToken) return;
+        if (i < text.length) {
+          target.textContent += text[i++];
+          scheduleAnim(step, 50, token);
+        } else {
+          scheduleAnim(() => cursor.classList.add('hidden'), 500, token);
+        }
+      };
+      step();
+    };
+
+    const renderTitle = (sectionIndex: number) => {
+      clearTitleAnim();
+      const token = titleAnimToken;
+
+      // Reset every title surface so a stale typewriter result can't bleed through
+      if (titleText) titleText.textContent = '';
+      if (titleCursor) titleCursor.classList.add('hidden');
+      if (heroTitleText) heroTitleText.textContent = '';
+      if (heroTitleCursor) heroTitleCursor.classList.add('hidden');
+
+      if (sectionIndex < 0 || sectionIndex >= sectionNames.length) {
+        hashTitle?.classList.add('hidden');
+        hashTitleSymbol?.classList.remove('visible');
+        heroHashSymbol?.classList.remove('visible');
+        return;
+      }
+
+      const name = sectionNames[sectionIndex];
+
+      if (sectionIndex === 0) {
+        hashTitle?.classList.add('hidden');
+        hashTitleSymbol?.classList.remove('visible');
+        heroHashSymbol?.classList.add('visible');
+        scheduleAnim(() => {
+          if (heroTitleText && heroTitleCursor) typewriter(heroTitleText, heroTitleCursor, name, token);
+        }, 400, token);
+      } else {
+        heroHashSymbol?.classList.remove('visible');
+        hashTitle?.classList.remove('hidden');
+        hashTitleSymbol?.classList.add('visible');
+        scheduleAnim(() => {
+          if (titleText && titleCursor) typewriter(titleText as HTMLElement, titleCursor as HTMLElement, name, token);
+        }, 400, token);
+      }
+    };
+
+    // Token-based cancellation alone keeps rapid swaps from mixing characters
+    const requestTitle = (sectionIndex: number) => {
+      if (sectionIndex === titleSection) return;
+      titleSection = sectionIndex;
+      hashTitle?.style.setProperty('--title-fade', '1');
+      renderTitle(sectionIndex);
+    };
+
+    // Animate parallax content for a section (title is handled separately via requestTitle)
     const animateSectionContent = (sectionIndex: number) => {
       if (sectionIndex < 0 || sectionIndex >= sections.length) return;
+
+      requestTitle(sectionIndex);
 
       const section = sections[sectionIndex];
       const parallaxLayers = section.querySelectorAll('.parallax-layer');
 
-      // Hero uses center typewriter, others use HashTitle
-      if (sectionIndex === 0) {
-        hashTitle?.classList.add('hidden');
-        hashTitleSymbol?.classList.remove('visible'); // Reset for next section
-        // Show # first, then start typewriter
-        heroHashSymbol?.classList.add('visible');
-        setTimeout(() => {
-          heroTypewriterAnimate(sectionNames[sectionIndex]);
-        }, 400);
-      } else {
-        heroHashSymbol?.classList.remove('visible'); // Reset hero # when leaving
-        hashTitle?.classList.remove('hidden');
-        // Show # first, then start typewriter
-        hashTitleSymbol?.classList.add('visible');
-        setTimeout(() => {
-          typewriterAnimate(sectionNames[sectionIndex]);
-        }, 400);
-      }
-
-      // Animate content with stagger
       gsap.fromTo(parallaxLayers,
         { opacity: 0, y: 30 },
         {
@@ -192,21 +189,22 @@ import Contact from '../components/sections/Contact.astro';
       isAnimating = true;
       const targetSection = sections[index];
 
-      // Scroll to section
       targetSection.scrollIntoView({ behavior: 'smooth' });
 
-      // Update current section
       currentSection = index;
-
-      // Dispatch event for navigation
       window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index } }));
 
-      // Animate content
+      requestTitle(index);
+
       setTimeout(() => {
-        animateSectionContent(index);
+        const section = sections[index];
+        const parallaxLayers = section.querySelectorAll('.parallax-layer');
+        gsap.fromTo(parallaxLayers,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out', delay: 0.3 }
+        );
       }, 300);
 
-      // Reset animation lock
       setTimeout(() => {
         isAnimating = false;
       }, scrollCooldown);
@@ -247,46 +245,46 @@ import Contact from '../components/sections/Contact.astro';
       return bestSection;
     };
 
-    let wasInFooter = false;
+    // Fade hashTitle out when section content has scrolled up far enough to collide with it
+    const TITLE_FADE_START = 80;
+    const TITLE_FADE_END = 220;
+    const updateTitleFade = () => {
+      if (!hashTitle) return;
+      if (currentSection < 1 || currentSection >= sections.length) {
+        hashTitle.style.setProperty('--title-fade', '1');
+        return;
+      }
+      const rect = sections[currentSection].getBoundingClientRect();
+      const overscroll = Math.max(0, -rect.top);
+      const t = Math.max(0, Math.min(1, (overscroll - TITLE_FADE_START) / (TITLE_FADE_END - TITLE_FADE_START)));
+      hashTitle.style.setProperty('--title-fade', String(1 - t));
+    };
 
     const handleScroll = () => {
       const scrollTop = mainContainer?.scrollTop || 0;
       const sectionHeight = window.innerHeight;
-
-      // Hide HashTitle on Hero (index 0) and in footer area
       const totalSectionsHeight = sections.length * sectionHeight;
-      const isOnHero = scrollTop < sectionHeight / 2;
       const isInFooter = scrollTop > totalSectionsHeight - sectionHeight / 2;
 
-      if (isOnHero || isInFooter) {
-        hashTitle?.classList.add('hidden');
-        // Clear text content so next section starts fresh with typewriter
-        if (titleText) titleText.textContent = '';
-        hashTitleSymbol?.classList.remove('visible');
-        wasInFooter = isInFooter;
-      } else {
-        hashTitle?.classList.remove('hidden');
-        // Re-animate when returning from footer
-        if (wasInFooter && currentSection > 0) {
-          animateSectionContent(currentSection);
-          wasInFooter = false;
+      if (isInFooter) {
+        requestTitle(-1);
+        return;
+      }
+
+      if (!isAnimating) {
+        const newSection = findVisibleSection();
+        if (newSection >= 0 && newSection < sections.length) {
+          if (newSection !== currentSection) {
+            currentSection = newSection;
+            window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index: currentSection } }));
+            animateSectionContent(currentSection);
+          } else if (titleSection !== currentSection) {
+            requestTitle(currentSection);
+          }
         }
       }
 
-      // Early return for section change logic
-      if (isAnimating) return;
-
-      const newSection = findVisibleSection();
-
-      if (newSection !== currentSection && newSection >= 0 && newSection < sections.length) {
-        currentSection = newSection;
-
-        // Dispatch event
-        window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index: currentSection } }));
-
-        // Animate content
-        animateSectionContent(currentSection);
-      }
+      updateTitleFade();
     };
 
     // Listen for scroll
@@ -322,25 +320,21 @@ import Contact from '../components/sections/Contact.astro';
 
     // Initialize after loading
     const init = () => {
-      // Initial animation for first section after a short delay
       setTimeout(() => {
         currentSection = 0;
-        animateSectionContent(0);
+        requestTitle(0);
+        const section = sections[0];
+        const parallaxLayers = section.querySelectorAll('.parallax-layer');
+        gsap.fromTo(parallaxLayers,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out', delay: 0.3 }
+        );
         initParallax();
-
-        // Dispatch initial section change
         window.dispatchEvent(new CustomEvent('sectionChange', { detail: { index: 0 } }));
       }, 500);
     };
 
-    // Wait for loading to complete
-    window.addEventListener('loadingComplete', init);
-
-    // If loading is already done
-    if (!document.getElementById('loadingScreen') ||
-        document.getElementById('loadingScreen')?.classList.contains('hidden')) {
-      init();
-    }
+    init();
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {

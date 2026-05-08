@@ -18,7 +18,8 @@
     display: flex;
     align-items: baseline;
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: var(--title-fade, 1);
+    transition: opacity 0.2s ease, transform 0.3s ease;
     /* section-contentと同じ位置に揃える（中央揃えを考慮） */
     padding-left: max(var(--space-xl), calc((100vw - 784px) / 2));
     padding-right: var(--space-xl);
@@ -27,6 +28,7 @@
   .hash-title.hidden {
     opacity: 0;
     transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   .hash-symbol {
