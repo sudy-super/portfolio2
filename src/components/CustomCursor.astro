@@ -99,13 +99,6 @@
     let innerX = mouseX;
     let innerY = mouseY;
 
-    // Hide cursor initially during loading
-    wrapper.classList.add('hidden');
-
-    // Show cursor after loading
-    window.addEventListener('loadingComplete', () => {
-      wrapper.classList.remove('hidden');
-    });
 
     // Track mouse position
     document.addEventListener('mousemove', (e) => {

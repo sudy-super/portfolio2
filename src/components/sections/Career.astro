@@ -15,7 +15,6 @@ const achievements = [
   <div class="section-content">
     <div class="career-grid">
       <div class="career-education parallax-layer" data-depth="0.05">
-        <h3 class="subsection-label">Education</h3>
         <ul class="education-list">
           {career.map((item) => (
             <li class="education-item">
@@ -31,10 +30,9 @@ const achievements = [
         <ul class="achievements-list">
           {achievements.map((item) => (
             <li class="achievement-item">
-              <div class="achievement-meta">
-                <span class="achievement-year">{item.year}</span>
-                <span class="achievement-grade">{item.grade}</span>
-              </div>
+              <span class="achievement-year">
+                {item.year}<span class="achievement-grade"> ({item.grade})</span>
+              </span>
               <span class="achievement-title">{item.title}</span>
             </li>
           ))}
@@ -105,22 +103,16 @@ const achievements = [
     border-bottom: 1px solid var(--color-border);
   }
 
-  .achievement-meta {
-    display: flex;
-    flex-direction: column;
-    min-width: 60px;
-  }
-
   .achievement-year {
     font-size: 0.875rem;
     font-weight: 600;
+    min-width: 90px;
+    font-family: var(--font-mono);
   }
 
   .achievement-grade {
-    font-size: 0.625rem;
     font-weight: 500;
     color: var(--color-muted);
-    text-transform: uppercase;
   }
 
   .achievement-title {

@@ -5,3 +5,5 @@ node_modules/
 .DS_Store
 .vscode/
 ref/
+# Spiral backup (for future reuse)
+src/components/r3f/_spiral-backup/

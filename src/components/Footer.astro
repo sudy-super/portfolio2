@@ -12,10 +12,6 @@ const currentYear = new Date().getFullYear();
 
   <div class="footer-main">
     <div class="footer-content">
-      <a href="/" class="footer-logo" aria-label="Back to top">
-        <img src="/sudy_logo.svg" alt="sudy" class="logo-svg" />
-      </a>
-
       <div class="footer-social">
         <a href="https://twitter.com/sudy_super" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
           <svg viewBox="0 0 16 16" aria-hidden="true" width="26" height="26">
@@ -84,21 +80,6 @@ const currentYear = new Date().getFullYear();
     flex-direction: column;
     align-items: center;
     gap: var(--space-lg);
-  }
-
-  .footer-logo {
-    display: block;
-    transition: transform var(--transition-base);
-  }
-
-  .footer-logo:hover {
-    transform: scale(1.05);
-  }
-
-  .logo-svg {
-    width: 200px;
-    height: 200px;
-    filter: brightness(0) invert(1);
   }
 
   .footer-social {
@@ -186,11 +167,6 @@ const currentYear = new Date().getFullYear();
       height: 100px;
     }
 
-    .logo-svg {
-      width: 140px;
-      height: 140px;
-    }
-
     .footer-social {
       gap: var(--space-md);
     }
@@ -212,11 +188,3 @@ const currentYear = new Date().getFullYear();
   }
 </style>
 
-<script>
-  const footerLogo = document.querySelector('.footer-logo');
-
-  footerLogo?.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.dispatchEvent(new CustomEvent('navigateTo', { detail: { index: 0 } }));
-  });
-</script>

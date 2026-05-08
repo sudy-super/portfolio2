@@ -1,0 +1,100 @@
+---
+---
+
+<section class="section link-section" id="link" data-section="link">
+  <div class="section-content">
+    <a
+      class="link-card parallax-layer"
+      data-depth="0.05"
+      href="/business-card/"
+      aria-label="名刺ページを開く"
+    >
+      <div class="link-content">
+        <span class="link-title">名刺を見る</span>
+        <span class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="22" height="22">
+            <path
+              d="M5 11L11 5M11 5H6M11 5V10"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style>
+  .link-section {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .link-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border-radius: 20px;
+    padding: clamp(1.5rem, 4vw, 2rem);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+    max-width: 400px;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .link-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0 var(--color-text);
+  }
+
+  .link-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+
+  .link-title {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    transition: color var(--transition-fast);
+  }
+
+  .link-card:hover .link-title {
+    color: #FF6B6B;
+  }
+
+  .link-arrow {
+    display: inline-flex;
+    color: var(--color-muted);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .link-card:hover .link-arrow {
+    color: var(--color-text);
+    transform: translate(2px, -2px);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .link-title {
+      font-size: 1.125rem;
+    }
+
+    .link-card {
+      width: 100%;
+    }
+  }
+</style>

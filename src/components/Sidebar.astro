@@ -2,11 +2,9 @@
 const sections = [
   { id: 'hero', name: '' },
   { id: 'about', name: 'About' },
-  { id: 'products', name: 'Products' },
   { id: 'career', name: 'Career' },
-  { id: 'skills', name: 'Skills' },
-  { id: 'intern', name: 'Intern' },
   { id: 'blog', name: 'Blog' },
+  { id: 'link', name: 'Link' },
   { id: 'contact', name: 'Contact' },
 ];
 ---
@@ -93,12 +91,6 @@ const sections = [
     white-space: nowrap;
   }
 
-  .sidebar-item.active .sidebar-label {
-    opacity: 1;
-    transform: translateX(0);
-    color: var(--color-text);
-  }
-
   .sidebar-item:hover .sidebar-label {
     opacity: 0.7;
     transform: translateX(0);
@@ -119,10 +111,7 @@ const sections = [
 
     if (!sidebar) return;
 
-    // Show sidebar after loading
-    window.addEventListener('loadingComplete', () => {
-      sidebar.classList.add('visible');
-    });
+    sidebar.classList.add('visible');
 
     // Update active state on section change
     window.addEventListener('sectionChange', ((e: CustomEvent) => {
