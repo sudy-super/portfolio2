@@ -4,6 +4,7 @@ node_modules/
 .env
 .DS_Store
 .vscode/
+.playwright-mcp/
 ref/
 # Spiral backup (for future reuse)
 src/components/r3f/_spiral-backup/
